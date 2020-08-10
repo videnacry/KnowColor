@@ -1,0 +1,40 @@
+:root{
+    --answer-color : coral;
+    --answers-color :rgb(233,233,233);
+}
+.answers,.answer{
+    border-radius:2px;
+    box-shadow:0 5px 5px rgba(82, 82, 82, 0.726);
+}
+.answers{
+    position:absolute;
+    bottom:10%;
+    display:flex;
+    justify-content:space-around;
+    height:25%;
+    width:100%;
+    background-color:rgb(233, 233, 233);
+}
+.answer{
+    width:25%;
+    height:70%;
+    align-self:center; 
+    background-color:var(--answer-color);
+    display: flex;
+    justify-content: center;
+}
+.r,.g,.b{
+    display: block;
+}
+.r{
+    color:red;
+}
+.g{
+    color:green;
+}
+.b{
+    color:blue;
+}
+.rgb{
+    align-self: center;
+}
