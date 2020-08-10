@@ -1,8 +1,11 @@
 :root{
-    --answer-color : coral;
-    --answers-color :rgb(233,233,233);
+    --answer-color : rgb(29, 29, 29);
+    --answers-color :rgb(179, 179, 179);
 }
-.answers,.answer{
+*{
+    box-sizing: border-box;
+}
+.answers,.card{
     border-radius:2px;
     box-shadow:0 5px 5px rgba(82, 82, 82, 0.726);
 }
@@ -13,15 +16,19 @@
     justify-content:space-around;
     height:25%;
     width:100%;
-    background-color:rgb(233, 233, 233);
+    background-color:var(--answers-color);
+    border:solid 10px rgba(170, 170, 170, 0.5);
 }
-.answer{
+.card{
     width:25%;
     height:70%;
     align-self:center; 
     background-color:var(--answer-color);
+    border:solid 5px rgba(24, 24, 24, 0.507);
     display: flex;
     justify-content: center;
+    position:relative;
+    perspective:1000px;
 }
 .r,.g,.b{
     display: block;
@@ -35,6 +42,20 @@
 .b{
     color:blue;
 }
+.rgb,.answer{
+    backface-visibility: hidden;
+    transition:transform 2s;
+    transform:rotateY(0deg)
+}
 .rgb{
     align-self: center;
+}
+.answer{
+    position:absolute;
+    height:100%;
+    width:100%;
+    transform:rotateY(360deg);
+}
+.rotate{
+    transform:rotateY(180deg);
 }

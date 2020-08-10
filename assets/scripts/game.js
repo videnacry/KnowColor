@@ -69,9 +69,10 @@ for(let answers = 2; answers>=0; answers--){
 }
 
 //-----------------------------------PRINT COLORS ALTERNATIVES------------------------------//
-let alternativePanels = document.getElementsByClassName('answer')
+let alternativePanels = document.getElementsByClassName('card')
 for(let index = 0; alternativePanels.length > index; index++){
     alternativePanels[index].innerHTML = 
+    '<div class="answer"></div>' +
     '<div class="rgb">' +
     '<span class="r"> r: ' + alternatives[index].r + '</span>' +
     '<span class="g"> g: ' + alternatives[index].g + '</span>' +
@@ -95,7 +96,7 @@ fontLoader.load('../realTest/node_modules/three/examples/fonts/gentilis_regular.
         size:2,
         height:0.5
     })
-    material = new THREE.MeshLambertMaterial({color:0x00FF5F})
+    material = new THREE.MeshLambertMaterial({color:0xdddddd})
     let text = new THREE.Mesh(title,material)
     text.position.set(-10,8,-10)
     scene.add(text)
