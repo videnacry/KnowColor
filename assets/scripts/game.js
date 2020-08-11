@@ -33,7 +33,7 @@ window.addEventListener('resize',function(){
     camera.updateProjectionMatrix()
 })
 //-------------------------------------COLOR BOX--------------------------------------------//
-let colors = [0xdddd00,0xdd0000,0x1d1d1d,0x7400a3,0x00ff00,0x0000dd,0x00fc92,0x813d00,0x00dddd,,0xff007b]
+let colors = [0xdddd00,0xdd0000,0x1d1d1d,0x7400a3,0x00dd00,0x0000dd,0x00fc92,0x813d00,0x00dddd,,0xff007b]
 let otherColors = [0xfc4600,0xc00024,0xeba000,0x7e7e7e]
 let colorIndex = Math.trunc(Math.random()*10)
 answerColor = colors[colorIndex]
@@ -50,14 +50,19 @@ colors[colorIndex] = 0xdddddd
 let answerPosition = Math.trunc(Math.random()*3)
 let positionX = -4
 for(let answers = 2; answers>=0; answers--){
+    let alternative = {}
     colorIndex = Math.trunc(Math.random()*10)
     let boxMaterial = new THREE.MeshLambertMaterial({color: colors[colorIndex]})
     let boxGeometry = new THREE.BoxGeometry()
     if(answers == answerPosition){
-        alternatives.push(material.color)
+        alternative.result = "Correct!"
+        alternative.rgb = material.color
+        alternatives.push(alternative)
         var box = new THREE.Mesh(boxGeometry,material)    
     }else{
-        alternatives.push(boxMaterial.color)
+        alternative.result = "Uncorrect!"
+        alternative.rgb = boxMaterial.color
+        alternatives.push(alternative)
         var box = new THREE.Mesh(boxGeometry,boxMaterial)
         colors[colorIndex] = otherColors[answers]
     }
@@ -71,13 +76,19 @@ for(let answers = 2; answers>=0; answers--){
 //-----------------------------------PRINT COLORS ALTERNATIVES------------------------------//
 let alternativePanels = document.getElementsByClassName('card')
 for(let index = 0; alternativePanels.length > index; index++){
+    let correct = alternatives[index].result.toLowerCase().replace('!','')
     alternativePanels[index].innerHTML = 
-    '<div class="answer"></div>' +
-    '<div class="rgb">' +
-    '<span class="r"> r: ' + alternatives[index].r + '</span>' +
-    '<span class="g"> g: ' + alternatives[index].g + '</span>' +
-    '<span class="b"> b: ' + alternatives[index].b + '</span>' +
-    '</div>'
+    '<div class="answer ' + correct + ' flipped"><span class="' + correct + '">' + alternatives[index].result + '</span></div>' +
+    '<div class="answer-bg"><div class="rgb">' +
+    '<span class="r"> r: ' + alternatives[index].rgb.r + '</span>' +
+    '<span class="g"> g: ' + alternatives[index].rgb.g + '</span>' +
+    '<span class="b"> b: ' + alternatives[index].rgb.b + '</span>' +
+    '</div></div>'
+    alternativePanels[index].addEventListener('click',function(){
+        let card = event.currentTarget
+        card.children[0].classList.toggle('flipped')
+        card.children[1].classList.toggle('flipped')
+    })
 }
 
 //--------------------------------------PRINT REST COLORS-----------------------------------//

@@ -1,13 +1,14 @@
 :root{
     --answer-color : rgb(29, 29, 29);
     --answers-color :rgb(179, 179, 179);
+    --correct-color : lightgreen;
+    --uncorrect-color : lightpink;
 }
 *{
     box-sizing: border-box;
 }
 .answers,.card{
     border-radius:2px;
-    box-shadow:0 5px 5px rgba(82, 82, 82, 0.726);
 }
 .answers{
     position:absolute;
@@ -23,8 +24,6 @@
     width:25%;
     height:70%;
     align-self:center; 
-    background-color:var(--answer-color);
-    border:solid 5px rgba(24, 24, 24, 0.507);
     display: flex;
     justify-content: center;
     position:relative;
@@ -42,20 +41,38 @@
 .b{
     color:blue;
 }
-.rgb,.answer{
-    backface-visibility: hidden;
-    transition:transform 2s;
-    transform:rotateY(0deg)
-}
 .rgb{
     align-self: center;
 }
-.answer{
-    position:absolute;
-    height:100%;
-    width:100%;
+.answer-bg{
+    background-color:var(--answer-color);
+    border:solid 5px rgba(24, 24, 24, 0.507);
     transform:rotateY(360deg);
 }
-.rotate{
+.answer,.answer-bg{
+    backface-visibility: hidden;
+    transition:transform 2s;
+    box-shadow:0 5px 5px rgba(82, 82, 82, 0.726);
+    position: absolute;
+    height:100%;
+    width:100%;
+    display:flex;
+    justify-content:center;
+}
+.answer{
+    transform:rotateY(0deg);
+}
+.correct,.uncorrect{
+    align-self:center
+}
+.correct{
+    color:green;
+    background-color:var(--correct-color) 
+}
+.uncorrect{
+    color:red;
+    background-color:var(--uncorrect-color)
+}
+.flipped{
     transform:rotateY(180deg);
 }
