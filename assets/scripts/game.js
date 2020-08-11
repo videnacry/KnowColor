@@ -84,10 +84,15 @@ for(let index = 0; alternativePanels.length > index; index++){
     '<span class="g"> g: ' + alternatives[index].rgb.g + '</span>' +
     '<span class="b"> b: ' + alternatives[index].rgb.b + '</span>' +
     '</div></div>'
+
+    //-----------------------------EVENT TO FLIP CARD----------------------------------------//
     alternativePanels[index].addEventListener('click',function(){
         let card = event.currentTarget
         card.children[0].classList.toggle('flipped')
         card.children[1].classList.toggle('flipped')
+        setTimeout(function(){
+            document.getElementsByClassName('answers')[0].classList.toggle('minimize')
+        },1500)
     })
 }
 
