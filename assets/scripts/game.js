@@ -5,9 +5,16 @@ let scene = new THREE.Scene()
 let camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000)
 camera.position.z = 5
 let renderer = new THREE.WebGLRenderer()
+let textMaterial
 let textureLoader = new THREE.TextureLoader()
 textureLoader.load('./assets/Environment.png',function(texture){
+    cubeTexture = (new THREE.WebGLCubeRenderTarget(500)).fromEquirectangularTexture(renderer,texture)
+    textMaterial = new THREE.MeshStandardMaterial({color:0x114444, roughness:0, metalness:0.8})
+    //material.envMap = cubeTexture.texture
+    //material.needsUpdate = true
+    scene.environment = cubeTexture.texture
     scene.background = texture
+    //scene.environment = cubeTexture.texture
 })
 let width = window.innerWidth, height = window.innerHeight
 if(height > width){
@@ -37,7 +44,7 @@ let colors = [0xdddd00,0xdd0000,0x1d1d1d,0x7400a3,0x00dd00,0x0000dd,0x00fc92,0x8
 let otherColors = [0xfc4600,0xc00024,0xeba000,0x7e7e7e]
 let colorIndex = Math.trunc(Math.random()*10)
 answerColor = colors[colorIndex]
-let material = new THREE.MeshLambertMaterial({color: answerColor})
+let material = new THREE.MeshStandardMaterial({color: answerColor, metalness: 0.5, roughness:0})
 let geometry = new THREE.BoxGeometry()
 let cube = new THREE.Mesh(geometry,material)
 cube.position.y = 0.5
@@ -52,7 +59,8 @@ let positionX = -4
 for(let answers = 2; answers>=0; answers--){
     let alternative = {}
     colorIndex = Math.trunc(Math.random()*10)
-    let boxMaterial = new THREE.MeshLambertMaterial({color: colors[colorIndex]})
+    
+    let boxMaterial = new THREE.MeshStandardMaterial({color: colors[colorIndex], metalness: 0.5, roughness:0})
     let boxGeometry = new THREE.BoxGeometry()
     if(answers == answerPosition){
         alternative.result = "Correct!"
@@ -98,7 +106,7 @@ for(let index = 0; alternativePanels.length > index; index++){
 
 //--------------------------------------PRINT REST COLORS-----------------------------------//
 colors.forEach((color,index) => {
-    let boxMaterial = new THREE.MeshLambertMaterial({color: color})
+    let boxMaterial = new THREE.MeshStandardMaterial({color: color, metalness: 0.5, roughness:0})
     let boxGeometry = new THREE.BoxGeometry()
     let box = new THREE.Mesh(boxGeometry,boxMaterial)
     box.position.set(index - 5,2.2,0)
@@ -108,7 +116,6 @@ colors.forEach((color,index) => {
 //---------------------------------------TEXT 3D--------------------------------------------//
 let texts3D = {title:'',tryAgain:''}
 let textStrings = {title:'Know the color ??', tryAgain:'Wanna try again ??'}
-let textMaterial = new THREE.MeshStandardMaterial({color:0xdddddd})
 let fontLoader = new THREE.FontLoader()
 fontLoader.setPath('../realTest/node_modules/three/examples/fonts/')
 fontLoader.load('gentilis_regular.typeface.json',function(font){
