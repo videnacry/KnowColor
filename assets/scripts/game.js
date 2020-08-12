@@ -105,17 +105,23 @@ colors.forEach((color,index) => {
     box.scale.set(0.3, 0.3, 0.3)
     scene.add(box)
 })
+//---------------------------------------TEXT 3D--------------------------------------------//
+let texts3D = {title:'',tryAgain:''}
+let textStrings = {title:'Know the color ??', tryAgain:'Wanna try again ??'}
+let textMaterial = new THREE.MeshStandardMaterial({color:0xdddddd})
 let fontLoader = new THREE.FontLoader()
-fontLoader.load('../realTest/node_modules/three/examples/fonts/gentilis_regular.typeface.json',function(font){
-    let title = new THREE.TextGeometry('Know the color ??',{
-        font:font,
-        size:2,
-        height:0.5
-    })
-    material = new THREE.MeshLambertMaterial({color:0xdddddd})
-    let text = new THREE.Mesh(title,material)
-    text.position.set(-10,8,-10)
-    scene.add(text)
+fontLoader.setPath('../realTest/node_modules/three/examples/fonts/')
+fontLoader.load('gentilis_regular.typeface.json',function(font){
+    for(let index in textStrings){
+        let text3D = new THREE.TextGeometry(textStrings[index],{
+            font:font,
+            size:2,
+            height:0.5
+        })
+        texts3D[index] = new THREE.Mesh(text3D,textMaterial)
+        texts3D[index].position.set(-10,8,-10)
+    }
+    scene.add(texts3D.title)
 })
 
 
