@@ -39,80 +39,7 @@ window.addEventListener('resize',function(){
     }
     camera.updateProjectionMatrix()
 })
-//-------------------------------------COLOR BOX--------------------------------------------//
-let colors = [0xdddd00,0xdd0000,0x1d1d1d,0x7400a3,0x00dd00,0x0000dd,0x00fc92,0x813d00,0x00dddd,,0xff007b]
-let otherColors = [0xfc4600,0xc00024,0xeba000,0x7e7e7e]
-let colorIndex = Math.trunc(Math.random()*10)
-answerColor = colors[colorIndex]
-let material = new THREE.MeshStandardMaterial({color: answerColor, metalness: 0.5, roughness:0})
-let geometry = new THREE.BoxGeometry()
-let cube = new THREE.Mesh(geometry,material)
-cube.position.y = 0.5
-scene.add(cube)
 
-//-------------------------------------COLOR BOXES------------------------------------------//
-let boxes = []
-let alternatives = []
-colors[colorIndex] = 0xdddddd
-let answerPosition = Math.trunc(Math.random()*3)
-let positionX = -4
-for(let answers = 2; answers>=0; answers--){
-    let alternative = {}
-    colorIndex = Math.trunc(Math.random()*10)
-    
-    let boxMaterial = new THREE.MeshStandardMaterial({color: colors[colorIndex], metalness: 0.5, roughness:0})
-    let boxGeometry = new THREE.BoxGeometry()
-    if(answers == answerPosition){
-        alternative.result = "Correct!"
-        alternative.rgb = material.color
-        alternatives.push(alternative)
-        var box = new THREE.Mesh(boxGeometry,material)    
-    }else{
-        alternative.result = "Uncorrect!"
-        alternative.rgb = boxMaterial.color
-        alternatives.push(alternative)
-        var box = new THREE.Mesh(boxGeometry,boxMaterial)
-        colors[colorIndex] = otherColors[answers]
-    }
-    boxes.push(box)
-    box.position.set(positionX,-2,0)
-    box.scale.set(0.8, 0.8, 0.8)
-    positionX += 4
-    scene.add(box)
-}
-
-//-----------------------------------PRINT COLORS ALTERNATIVES------------------------------//
-let alternativePanels = document.getElementsByClassName('card')
-for(let index = 0; alternativePanels.length > index; index++){
-    let correct = alternatives[index].result.toLowerCase().replace('!','')
-    alternativePanels[index].innerHTML = 
-    '<div class="answer ' + correct + ' flipped"><span class="' + correct + '">' + alternatives[index].result + '</span></div>' +
-    '<div class="answer-bg"><div class="rgb">' +
-    '<span class="r"> r: ' + alternatives[index].rgb.r + '</span>' +
-    '<span class="g"> g: ' + alternatives[index].rgb.g + '</span>' +
-    '<span class="b"> b: ' + alternatives[index].rgb.b + '</span>' +
-    '</div></div>'
-
-    //-----------------------------EVENT TO FLIP CARD----------------------------------------//
-    alternativePanels[index].addEventListener('click',function(){
-        let card = event.currentTarget
-        card.children[0].classList.toggle('flipped')
-        card.children[1].classList.toggle('flipped')
-        setTimeout(function(){
-            document.getElementsByClassName('answers')[0].classList.toggle('minimize')
-        },1500)
-    })
-}
-
-//--------------------------------------PRINT REST COLORS-----------------------------------//
-colors.forEach((color,index) => {
-    let boxMaterial = new THREE.MeshStandardMaterial({color: color, metalness: 0.5, roughness:0})
-    let boxGeometry = new THREE.BoxGeometry()
-    let box = new THREE.Mesh(boxGeometry,boxMaterial)
-    box.position.set(index - 5,2.2,0)
-    box.scale.set(0.3, 0.3, 0.3)
-    scene.add(box)
-})
 //---------------------------------------TEXT 3D--------------------------------------------//
 let texts3D = {title:'',tryAgain:''}
 let textStrings = {title:'Know the color ??', tryAgain:'Wanna try again ??'}
@@ -126,23 +53,128 @@ fontLoader.load('gentilis_regular.typeface.json',function(font){
             height:0.5
         })
         texts3D[index] = new THREE.Mesh(text3D,textMaterial)
+        texts3D[index].name = index
         texts3D[index].position.set(-10,8,-10)
     }
     scene.add(texts3D.title)
 })
 
+play()
 
-let rotations = [[0.01,-0.01],[-0.01,-0.01],[-0.01,0.01]]
-var animate = function () {
-    requestAnimationFrame( animate );
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-    boxes.forEach((box,index) => {
-        box.rotation.x += rotations[index][0]
-        box.rotation.y += rotations[index][1]
-    });
+    
+//-----------------------------EVENT TO FLIP CARD----------------------------------------//
+let alternativePanels = document.getElementsByClassName('card')
+for(let index = 0; alternativePanels.length > index; index++){
+    alternativePanels[index].addEventListener('click',function(){
+        let card = event.currentTarget
+        card.children[0].classList.toggle('flipped')
+        card.children[1].classList.toggle('flipped')
+        scene.remove(texts3D.title)
+        scene.add(texts3D.tryAgain)
+        document.getElementsByClassName('choices')[0].classList.toggle('minimize')
+        setTimeout(function(){
+            document.getElementsByClassName('answers')[0].classList.toggle('minimize')
+        },1500)
+    })
+}
 
-    renderer.render( scene, camera );
-};
+function play(){
+    document.getElementsByClassName('choices')[0].classList.toggle('minimize')
+    document.getElementsByClassName('answers')[0].className = ('answers')
+    if(scene.getObjectByName('tryAgain') != undefined){
+        scene.add(texts3D.title)
+        scene.remove(scene.getObjectByName('tryAgain'))
+    }
+    scene.remove(scene.getObjectByName('alternatives3D'))
+    scene.remove(scene.getObjectByName('boxes3D'))
+    scene.remove(scene.getObjectByName('cube'))
+    
+    //-------------------------------------COLOR BOX--------------------------------------------//
+    let colors = [0xdddd00,0xdd0000,0x1d1d1d,0x7400a3,0x00dd00,0x0000dd,0x00fc92,0x813d00,0x00dddd,,0xff007b]
+    let otherColors = [0xfc4600,0xc00024,0xeba000,0x7e7e7e]
+    let colorIndex = Math.trunc(Math.random()*10)
+    answerColor = colors[colorIndex]
+    let material = new THREE.MeshStandardMaterial({color: answerColor, metalness: 0.5, roughness:0})
+    let geometry = new THREE.BoxGeometry()
+    let cube = new THREE.Mesh(geometry,material)
+    cube.name = 'cube'
+    cube.position.y = 0.5
+    scene.add(cube)
+    
+    //-------------------------------------COLOR BOXES------------------------------------------//
+    let boxes = []
+    let alternatives = []
+    let alternatives3D = new THREE.Object3D()
+    alternatives3D.name = "alternatives3D"
+    colors[colorIndex] = 0xdddddd
+    let answerPosition = Math.trunc(Math.random()*3)
+    let positionX = -4
+    for(let answers = 2; answers>=0; answers--){
+        let alternative = {}
+        colorIndex = Math.trunc(Math.random()*10)
+        
+        let boxMaterial = new THREE.MeshStandardMaterial({color: colors[colorIndex], metalness: 0.5, roughness:0})
+        let boxGeometry = new THREE.BoxGeometry()
+        if(answers == answerPosition){
+            alternative.result = "Correct!"
+            alternative.rgb = material.color
+            alternatives.push(alternative)
+            var box = new THREE.Mesh(boxGeometry,material)    
+        }else{
+            alternative.result = "Uncorrect!"
+            alternative.rgb = boxMaterial.color
+            alternatives.push(alternative)
+            var box = new THREE.Mesh(boxGeometry,boxMaterial)
+            colors[colorIndex] = otherColors[answers]
+        }
+        boxes.push(box)
+        box.position.set(positionX,-2,0)
+        box.scale.set(0.8, 0.8, 0.8)
+        positionX += 4
+        alternatives3D.add(box)
+    }
+    scene.add(alternatives3D)
+    
+    //-----------------------------------PRINT COLORS ALTERNATIVES------------------------------//
+    let alternativePanels = document.getElementsByClassName('card')
+    for(let index = 0; alternativePanels.length > index; index++){
+        let correct = alternatives[index].result.toLowerCase().replace('!','')
+        alternativePanels[index].innerHTML = 
+        '<div class="answer ' + correct + ' flipped"><span class="' + correct + '">' + alternatives[index].result + '</span></div>' +
+        '<div class="answer-bg"><div class="rgb">' +
+        '<span class="r"> r: ' + alternatives[index].rgb.r + '</span>' +
+        '<span class="g"> g: ' + alternatives[index].rgb.g + '</span>' +
+        '<span class="b"> b: ' + alternatives[index].rgb.b + '</span>' +
+        '</div></div>'
+    }
+    
+    //--------------------------------------PRINT REST COLORS-----------------------------------//
+    let boxes3D = new THREE.Object3D()
+    boxes3D.name = 'boxes3D'
+    colors.forEach((color,index) => {
+        let boxMaterial = new THREE.MeshStandardMaterial({color: color, metalness: 0.5, roughness:0})
+        let boxGeometry = new THREE.BoxGeometry()
+        let box = new THREE.Mesh(boxGeometry,boxMaterial)
+        box.position.set(index - 5,2.2,0)
+        box.scale.set(0.3, 0.3, 0.3)
+        boxes3D.add(box)
+    })
+    scene.add(boxes3D)
+    
+    let rotations = [[0.01,-0.01],[-0.01,-0.01],[-0.01,0.01]]
+    var animate = function () {
+        requestAnimationFrame( animate );
+        boxes3D.rotation.y += 0.01;
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        boxes.forEach((box,index) => {
+            box.rotation.x += rotations[index][0]
+            box.rotation.y += rotations[index][1]
+        });
 
-animate();
+        renderer.render( scene, camera );
+    };
+
+    animate();
+}
+
