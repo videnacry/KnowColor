@@ -1,6 +1,7 @@
 
 
 //-------------------------------------SCENE------------------------------------------------//
+import * as THREE from 'https://unpkg.com/three@0.122.0/build/three.module.js'
 let scene = new THREE.Scene()
 let camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000)
 camera.position.z = 5
@@ -8,7 +9,7 @@ let renderer = new THREE.WebGLRenderer()
 let textMaterial
 let textureLoader = new THREE.TextureLoader()
 textureLoader.load('./assets/Environment.png',function(texture){
-    cubeTexture = (new THREE.WebGLCubeRenderTarget(500)).fromEquirectangularTexture(renderer,texture)
+    let cubeTexture = (new THREE.WebGLCubeRenderTarget(500)).fromEquirectangularTexture(renderer,texture)
     textMaterial = new THREE.MeshStandardMaterial({color:0x114444, roughness:0, metalness:0.8})
     //material.envMap = cubeTexture.texture
     //material.needsUpdate = true
@@ -44,7 +45,7 @@ window.addEventListener('resize',function(){
 let texts3D = {title:'',tryAgain:''}
 let textStrings = {title:'Know the color ??', tryAgain:'Wanna try again ??'}
 let fontLoader = new THREE.FontLoader()
-fontLoader.setPath('../realTest/node_modules/three/examples/fonts/')
+fontLoader.setPath('https://unpkg.com/three@0.122.0/examples/fonts/')
 fontLoader.load('gentilis_regular.typeface.json',function(font){
     for(let index in textStrings){
         let text3D = new THREE.TextGeometry(textStrings[index],{
@@ -77,7 +78,7 @@ for(let index = 0; alternativePanels.length > index; index++){
         },1500)
     })
 }
-
+document.getElementById('try-again').addEventListener('click', play)
 function play(){
     document.getElementsByClassName('choices')[0].classList.toggle('minimize')
     document.getElementsByClassName('answers')[0].className = ('answers')
@@ -93,7 +94,7 @@ function play(){
     let colors = [0xdddd00,0xdd0000,0x1d1d1d,0x7400a3,0x00dd00,0x0000dd,0x00fc92,0x813d00,0x00dddd,,0xff007b]
     let otherColors = [0xfc4600,0xc00024,0xeba000,0x7e7e7e]
     let colorIndex = Math.trunc(Math.random()*10)
-    answerColor = colors[colorIndex]
+    let answerColor = colors[colorIndex]
     let material = new THREE.MeshStandardMaterial({color: answerColor, metalness: 0.5, roughness:0})
     let geometry = new THREE.BoxGeometry()
     let cube = new THREE.Mesh(geometry,material)
