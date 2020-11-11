@@ -1,0 +1,24 @@
+{
+  "name": "KnowColor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "three": "^0.122.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/videnacry/KnowColor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/videnacry/KnowColor/issues"
+  },
+  "homepage": "https://github.com/videnacry/KnowColor#readme"
+}
